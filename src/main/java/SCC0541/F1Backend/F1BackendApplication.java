@@ -10,4 +10,4 @@ public class F1BackendApplication {
 		SpringApplication.run(F1BackendApplication.class, args);
 	}
 
-}
+}  	
