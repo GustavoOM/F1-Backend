@@ -1,6 +1,5 @@
 package SCC0541.F1Backend.models;
 
-import SCC0541.F1Backend.models.primary_keys.LapTimePK;
 import SCC0541.F1Backend.models.primary_keys.PitStopPK;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
