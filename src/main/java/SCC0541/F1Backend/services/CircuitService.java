@@ -1,7 +1,7 @@
-package SCC0541.F1Backend.service;
+package SCC0541.F1Backend.services;
 
-import SCC0541.F1Backend.dto.CircuitDTO;
-import SCC0541.F1Backend.repositories.CircuitsRepository;
+import SCC0541.F1Backend.dtos.CircuitDTO;
+import SCC0541.F1Backend.repositories.CircuitRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ public class CircuitService {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private CircuitsRepository circuitsRepository;
+    private CircuitRepository circuitsRepository;
     public List<CircuitDTO> list(){
         return circuitsRepository.findAll().stream()
                 .map(c -> objectMapper.convertValue(c, CircuitDTO.class))

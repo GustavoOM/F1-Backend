@@ -1,7 +1,7 @@
-package SCC0541.F1Backend.controller;
+package SCC0541.F1Backend.controllers;
 
-import SCC0541.F1Backend.dto.CircuitDTO;
-import SCC0541.F1Backend.service.CircuitService;
+import SCC0541.F1Backend.dtos.CircuitDTO;
+import SCC0541.F1Backend.services.CircuitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;

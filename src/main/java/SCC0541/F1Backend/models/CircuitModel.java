@@ -1,4 +1,4 @@
-package SCC0541.F1Backend.model;
+package SCC0541.F1Backend.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
