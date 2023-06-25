@@ -15,8 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/lap-times") // localhost:8080/circuits
 public class LapTimeController {
-
-
+    
     @Autowired
     private LapTimeService laptimeService;
 
