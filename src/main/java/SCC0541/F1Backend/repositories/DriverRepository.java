@@ -1,4 +1,9 @@
 package SCC0541.F1Backend.repositories;
 
-public interface DriverRepository {
+import SCC0541.F1Backend.models.DriverModel;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface DriverRepository extends JpaRepository<DriverModel,Integer> {
 }
