@@ -14,31 +14,31 @@ import lombok.Setter;
 public class CircuitModel {
     // identificadores
     @Id
-    @Column(name = "CircuitId")
+    @Column(name = "circuitid")
     private Integer circuitId;
 
-    @Column(unique = true, name = "CircuitRef")
+    @Column(unique = true, name = "circuitref")
     private String circuitRef;
 
-    @Column(unique = true, name = "Name")
+    @Column(unique = true, name = "name")
     private String name;
 
-    @Column(name = "Location")
+    @Column(name = "location")
     private String location;
 
-    @Column(name = "Country")
+    @Column(name = "country")
     private String country;
 
-    @Column(name = "Lat")
+    @Column(name = "lat")
     private Float lat;
 
-    @Column(name = "Lng")
+    @Column(name = "lng")
     private Float lng;
 
-    @Column(name = "Alt")
+    @Column(name = "alt")
     private Float alt;
 
-    @Column(name = "URL")
+    @Column(name = "url")
     private String url;
 
 }
