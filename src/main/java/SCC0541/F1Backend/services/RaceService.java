@@ -1,8 +1,6 @@
 package SCC0541.F1Backend.services;
 
-import SCC0541.F1Backend.dtos.QualifyingDTO;
 import SCC0541.F1Backend.dtos.RaceDTO;
-import SCC0541.F1Backend.repositories.QualifyingRepository;
 import SCC0541.F1Backend.repositories.RaceRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
