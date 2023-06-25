@@ -1,7 +1,8 @@
 package SCC0541.F1Backend.controllers;
 
-import SCC0541.F1Backend.dtos.CircuitDTO;
+import SCC0541.F1Backend.dtos.GeoCitiesDTO;
 import SCC0541.F1Backend.dtos.LapTimeDTO;
+import SCC0541.F1Backend.services.GeoCitiesService;
 import SCC0541.F1Backend.services.LapTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -11,17 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
 @Validated
 @RestController
-@RequestMapping("/lap-times") // localhost:8080/circuits
-public class LapTimeController {
+@RequestMapping("/geo-cities") // localhost:8080/geo-cities
+public class GeoCitiesController {
 
     @Autowired
-    private LapTimeService laptimeService;
+    private GeoCitiesService geoCitiesService;
 
     @GetMapping
-    public List<LapTimeDTO> getAllLapTimes(){
-        return laptimeService.list();
+    public List<GeoCitiesDTO> getAllGeoCities(){
+        return geoCitiesService.getAllGeoCities();
     }
 
 }
