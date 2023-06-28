@@ -14,6 +14,27 @@ Este script define e carrega as tabelas, cada uma de seu respectivo arquivo em f
 Para executar o script, é necessário ter as tabelas já em um diretório do disco local indicado na variável DirLocal, que deve ser definida na linha 38
 */
 --===========================================================================
+CREATE OR REPLACE FUNCTION Public.create_constructor_user_after_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Cria um novo usuário na tabela USERS
+    INSERT INTO USERS (userId, login, password, tipo, idOriginal)
+    VALUES (nextval('SEQ_USER_ID'), NEW.constructorRef, md5(CONCAT(NEW.constructorRef, '_c')), 'Escuderia', NEW.constructorId);
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION Public.create_driver_user_after_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Cria um novo usuário na tabela USERS
+    INSERT INTO USERS (userId, login, password, tipo, idOriginal)
+    VALUES (nextval('SEQ_USER_ID'), NEW.driverRef, md5(CONCAT(NEW.driverRef, '_d')), 'Piloto', NEW.driverId);
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION Public.LoadFile (Diret TEXT, FN TEXT, Tab TEXT, Delimiter TEXT) 
     RETURNS INT AS $$
@@ -442,26 +463,6 @@ CREATE VIEW Tables AS
 
 Table Tables;
 
-CREATE OR REPLACE FUNCTION create_constructor_user_after_insert()
-RETURNS TRIGGER AS $$
-BEGIN
-    -- Cria um novo usuário na tabela USERS
-    INSERT INTO USERS (userId, login, password, tipo, idOriginal)
-    VALUES (nextval('SEQ_USER_ID'), NEW.constructorRef, md5(CONCAT(NEW.constructorRef, '_c')), 'Escuderia', NEW.constructorId);
-    
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION create_driver_user_after_insert()
-RETURNS TRIGGER AS $$
-BEGIN
-    -- Cria um novo usuário na tabela USERS
-    INSERT INTO USERS (userId, login, password, tipo, idOriginal)
-    VALUES (nextval('SEQ_USER_ID'), NEW.driverRef, md5(CONCAT(NEW.driverRef, '_d')), 'Piloto', NEW.driverId);
-    
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
 
 
