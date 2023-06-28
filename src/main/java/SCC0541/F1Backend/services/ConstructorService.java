@@ -1,6 +1,7 @@
 package SCC0541.F1Backend.services;
 
 import SCC0541.F1Backend.dtos.ConstructorDTO;
+import SCC0541.F1Backend.dtos.CreateConstructorDTO;
 import SCC0541.F1Backend.repositories.ConstructorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,15 @@ public class ConstructorService {
         return objectMapper.convertValue(
                 constructorRepository.findById(id),ConstructorDTO.class
         );
+    }
+
+    public void createContructor(CreateConstructorDTO createConstructorDTO) {
+        constructorRepository
+                .create(
+                        createConstructorDTO.getConstructorRef(),
+                        createConstructorDTO.getName(),
+                        createConstructorDTO.getNationality(),
+                        createConstructorDTO.getUrl()
+                );
     }
 }
