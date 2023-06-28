@@ -67,7 +67,17 @@ DO $$ DECLARE DirLocal TEXT; BEGIN
 --==============================================================================================================
 --== Define todas as tabelas ===================================================================================
 --== Formula 1
-    
+
+DROP TABLE IF EXISTS USERS;
+
+-- Criando a tabela usuários
+CREATE TABLE LOG_TABLE (
+	userId INTEGER NOT NULL PRIMARY KEY,
+	timestamp TIMESTAMP NOT NULL DEFAULT NOW()
+		
+);
+
+
 DROP TABLE IF EXISTS USERS;
 
 -- Criando a tabela usuários
