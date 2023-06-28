@@ -1,5 +1,6 @@
 package SCC0541.F1Backend.controllers;
 
+import SCC0541.F1Backend.dtos.TokenDTO;
 import SCC0541.F1Backend.dtos.UsuarioLoginDTO;
 import SCC0541.F1Backend.dtos.UsuarioRespostaDTO;
 import SCC0541.F1Backend.models.UsuarioModel;
@@ -38,9 +39,11 @@ public class UsuarioController {
                     @ApiResponse(responseCode = "500", description = "Erro ao autenticar.")
             }
     )
-    @Operation(summary = "Autenticar usuário.", description = "Valida através da geração de um token a existência do " +
-            "par login/senha cadastrado no banco de dados.")
-    public String login(@RequestBody @Valid UsuarioLoginDTO usuarioLoginDTO) {
+    @Operation(summary = "Autenticar usuário com login e senha.", description = "Caso o usuário exista na base, " +
+            "retorna um token que poderá ser utilizado para acessar recursos da API.")
+    public TokenDTO login(@RequestBody @Valid UsuarioLoginDTO usuarioLoginDTO) {
+
+        log.info(usuarioLoginDTO.getUsername());
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
@@ -50,6 +53,8 @@ public class UsuarioController {
 
         Authentication authentication = authenticationManager.
                 authenticate(usernamePasswordAuthenticationToken);
+
+        log.info("BORA PRA TOKENSERVICE");
 
         return tokenService.getToken((UsuarioModel) authentication.getPrincipal());
     }

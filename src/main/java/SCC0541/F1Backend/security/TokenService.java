@@ -1,8 +1,7 @@
 package SCC0541.F1Backend.security;
 
+import SCC0541.F1Backend.dtos.TokenDTO;
 import SCC0541.F1Backend.models.UsuarioModel;
-
-
 import SCC0541.F1Backend.services.UsuarioService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +29,7 @@ public class TokenService {
 
     private final UsuarioService usuarioService;
 
-    public String getToken(UsuarioModel usuarioModel) {
+    public TokenDTO getToken(UsuarioModel usuarioModel) {
 
         Date now = new Date();
 
@@ -50,7 +48,7 @@ public class TokenService {
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
 
-        return "Bearer " + token;
+        return new TokenDTO(token, listaDeCargos);
     }
 
     public UsernamePasswordAuthenticationToken isValid(String token) {
@@ -59,13 +57,14 @@ public class TokenService {
             return null;
         }
 
-        Claims body = Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
+        if (!token.startsWith("Bearer ")) {
+            token = "Bearer " + token;
+        }
+
+        Claims body = recoverBodyFromToken(token);
 
         Integer idUsuario = body.get("id", Integer.class);
-        Integer originalIdUsuario = body.get("originalId", Integer.class);
+
 
         if (idUsuario != null){
 
@@ -93,6 +92,13 @@ public class TokenService {
             return usernamePasswordAuthenticationToken;
         }
         return null;
+    }
+
+    private Claims recoverBodyFromToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
     }
 
 

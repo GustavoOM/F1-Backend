@@ -4,16 +4,12 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import lombok.RequiredArgsConstructor;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-
 
 import java.io.IOException;
 import java.util.Collection;
@@ -25,7 +21,6 @@ import java.util.stream.Collectors;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
-
     public static final String BEARER = "Bearer ";
 
     @Override
@@ -33,10 +28,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        log.info("TO NA DOFILTERINTERNAL");
         String token = getTokenFromHeader(request);
-
-        log.info("O TOKEN É ESSE: "+ token);
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 tokenService.isValid(token);

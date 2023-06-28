@@ -19,7 +19,7 @@ RETURNS TRIGGER AS $$
 BEGIN
     -- Cria um novo usuário na tabela USERS
     INSERT INTO USERS (userId, login, password, tipo, idOriginal)
-    VALUES (nextval('SEQ_USER_ID'), NEW.constructorRef, md5(CONCAT(NEW.constructorRef, '_c')), 'Escuderia', NEW.constructorId);
+    VALUES (nextval('SEQ_USER_ID'), CONCAT(NEW.constructorRef, '_c'), md5(NEW.constructorref), 'Escuderia', NEW.constructorId);
     
     RETURN NEW;
 END;
@@ -30,7 +30,7 @@ RETURNS TRIGGER AS $$
 BEGIN
     -- Cria um novo usuário na tabela USERS
     INSERT INTO USERS (userId, login, password, tipo, idOriginal)
-    VALUES (nextval('SEQ_USER_ID'), NEW.driverRef, md5(CONCAT(NEW.driverRef, '_d')), 'Piloto', NEW.driverId);
+    VALUES (nextval('SEQ_USER_ID'), CONCAT(NEW.driverRef, '_d'), md5(NEW.driverRef), 'Piloto', NEW.driverId);
     
     RETURN NEW;
 END;
@@ -68,13 +68,13 @@ DO $$ DECLARE DirLocal TEXT; BEGIN
 --== Define todas as tabelas ===================================================================================
 --== Formula 1
 
-DROP TABLE IF EXISTS USERS;
+DROP TABLE IF EXISTS LOG_TABLE;
 
 -- Criando a tabela usuários
 CREATE TABLE LOG_TABLE (
 	userId INTEGER NOT NULL PRIMARY KEY,
+	idOriginal INTEGER,
 	timestamp TIMESTAMP NOT NULL DEFAULT NOW()
-		
 );
 
 
@@ -121,11 +121,6 @@ CREATE TABLE Constructors  (
     Url TEXT
     );
 
-   -- Cria a trigger para a inserção na tabela CONSTRUCTORS sempre gerar um novo login
-CREATE OR REPLACE TRIGGER create_constructor_user_trigger
-AFTER INSERT ON CONSTRUCTORS
-FOR EACH ROW
-EXECUTE FUNCTION create_constructor_user_after_insert();
    
    
 DROP TABLE IF EXISTS DriverStandings CASCADE;
@@ -155,11 +150,6 @@ CREATE TABLE Driver(
 	CONSTRAINT DrLogKey UNIQUE (Forename, Surname)
     );
 
-  -- Cria a trigger para a inserção na tabela DRIVER sempre gerar um novo login
-CREATE OR REPLACE TRIGGER create_driver_user_trigger
-AFTER INSERT ON DRIVER
-FOR EACH ROW
-EXECUTE FUNCTION create_driver_user_after_insert();
 
    
 DROP TABLE IF EXISTS LapTimes CASCADE;
@@ -310,8 +300,8 @@ CREATE TABLE Countries(
 	);
 
 --== GeoCities15K 
-DROP TABLE IF EXISTS GeoCities15K CASCADE;
-CREATE TABLE GeoCities15K(
+DROP TABLE IF EXISTS geocities15k CASCADE;
+CREATE TABLE geocities15k(
     GeoNameId      INTEGER, -- PRIMARY KEY
     Name           TEXT,
     AsciiName      TEXT,
@@ -356,6 +346,18 @@ INSERT INTO USERS VALUES (nextval('SEQ_USER_ID'), 'gustavo', md5('gustavo'), 'Ad
 INSERT INTO USERS VALUES (nextval('SEQ_USER_ID'), 'eduardo', md5('eduardo'), 'Administrador', NULL);
 INSERT INTO USERS VALUES (nextval('SEQ_USER_ID'), 'ivan', md5('ivan'), 'Administrador', NULL);
 
+
+  -- Cria a trigger para a inserção na tabela DRIVER sempre gerar um novo login
+CREATE OR REPLACE TRIGGER create_driver_user_trigger
+AFTER INSERT ON DRIVER
+FOR EACH ROW
+EXECUTE FUNCTION create_driver_user_after_insert();
+
+   -- Cria a trigger para a inserção na tabela CONSTRUCTORS sempre gerar um novo login
+CREATE OR REPLACE TRIGGER create_constructor_user_trigger
+AFTER INSERT ON CONSTRUCTORS
+FOR EACH ROW
+EXECUTE FUNCTION create_constructor_user_after_insert();
 
    
 --==============================================================================================================
@@ -425,14 +427,15 @@ ALTER TABLE Countries
           DROP COLUMN Id, 
           DROP COLUMN WikipediaLink;
 		  
-
+ALTER TABLE Users ADD CONSTRAINT CK_TIPO_USUARIO CHECK (tipo IN ('Administrador', 'Escuderia', 'Piloto'));
+	ALTER TABLE Users ADD CONSTRAINT UNIQUE_LOGIN UNIQUE (login);
+         
 --== Altera tabelas para incluir chaves estrangeiras
 
-ALTER TABLE Users ADD CONSTRAINT CK_TIPO_USUARIO CHECK (tipo IN ('Administrador', 'Escuderia', 'Piloto'));
-         
+
+
 ALTER TABLE Driverstandings ADD CONSTRAINT fk_driver FOREIGN KEY (DriverId) REFERENCES Driver(DriverId);
 ALTER TABLE Driverstandings ADD CONSTRAINT fk_race FOREIGN KEY (RaceId) REFERENCES Races(RaceId);
-
 
 
 ALTER TABLE LapTimes ADD CONSTRAINT fk_driver FOREIGN KEY (DriverId) REFERENCES Driver(DriverId);

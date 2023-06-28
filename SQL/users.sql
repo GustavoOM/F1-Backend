@@ -80,6 +80,10 @@ INSERT INTO driver
 VALUES (44444, 'eduazevedo4', '1545644', 'HEX', 'Eduardinho4', 'Azevedo4', '1985-01-07', 'Irish', 'http://en.wikipedia.org/wiki/EduAzevedo4');
 
 
+SELECT login, COUNT(*) AS quantidade
+FROM USERS
+GROUP BY LOGIN
+HAVING COUNT(*) > 1;
 
 
 

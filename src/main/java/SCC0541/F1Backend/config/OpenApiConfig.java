@@ -24,12 +24,13 @@ public class OpenApiConfig {
     public void index(HttpServletResponse response) throws IOException {
         response.sendRedirect("/swagger-ui/index.html");
     }
+
     @Bean
     public OpenAPI springShopOpenAPI() {
         String securitySchemeName = "bearerAuth";
         return new OpenAPI()
-                .info(new Info().title("Fórmula 1 API")
-                        .description("Documentação dos endpoints expostos concernente a base de dados da fórmuka 1")
+                .info(new Info().title("Gestão de Ensino API")
+                        .description("Gestão de Ensino API documentação")
                         .version("v1.0.0")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
