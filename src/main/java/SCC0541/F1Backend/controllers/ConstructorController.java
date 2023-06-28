@@ -1,13 +1,12 @@
 package SCC0541.F1Backend.controllers;
 
 import SCC0541.F1Backend.dtos.ConstructorDTO;
+import SCC0541.F1Backend.dtos.CreateConstructorDTO;
 import SCC0541.F1Backend.services.ConstructorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,10 +22,11 @@ public class ConstructorController {
         return constructorService.list();
     }
 
-
     @GetMapping("/{id}")
     public ConstructorDTO findById(@PathVariable("id") Integer id){
         return constructorService.findById(id);
     }
 
+    @PostMapping("/create")
+    public void createContructor(@RequestBody @Valid CreateConstructorDTO createConstructorDTO) { constructorService.createContructor(createConstructorDTO); }
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,4 +21,8 @@ public class DriverService {
                 .map(d -> objectMapper.convertValue(d, DriverDTO.class))
                 .toList();
     }
+
+    //public DriverDTO createDriver(String driverRef, Integer number, String code, String forename, String surname, LocalDateTime birthDay, String nationality){
+    //    return
+    //}
 }
