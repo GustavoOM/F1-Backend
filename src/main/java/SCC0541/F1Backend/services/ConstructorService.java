@@ -16,25 +16,23 @@ public class ConstructorService {
     @Autowired
     private ConstructorRepository constructorRepository;
 
+    public ConstructorDTO findById(Integer id){
+        return objectMapper
+                .convertValue(
+                        constructorRepository.findById(id).orElseThrow(), ConstructorDTO.class);
+    }
+
     public List<ConstructorDTO> list(){
         return  constructorRepository.findAll().stream()
                 .map(c -> objectMapper.convertValue(c, ConstructorDTO.class))
                 .toList();
     }
 
-    public ConstructorDTO findById(Integer id) {
-        return objectMapper.convertValue(
-                constructorRepository.findById(id),ConstructorDTO.class
-        );
-    }
 
     public void createContructor(CreateConstructorDTO createConstructorDTO) {
         constructorRepository
-                .create(
-                        createConstructorDTO.getConstructorRef(),
-                        createConstructorDTO.getName(),
-                        createConstructorDTO.getNationality(),
-                        createConstructorDTO.getUrl()
+                .createConstructor(
+                        createConstructorDTO
                 );
     }
 }

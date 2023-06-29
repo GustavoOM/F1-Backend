@@ -1,27 +1,122 @@
 package SCC0541.F1Backend.repositories;
 
+import SCC0541.F1Backend.database.SQLScripts;
 import SCC0541.F1Backend.dtos.CreateConstructorDTO;
 import SCC0541.F1Backend.models.ConstructorModel;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @Repository
-public interface ConstructorRepository extends JpaRepository<ConstructorModel, Integer> {
+public class ConstructorRepository {
 
-    @Query(nativeQuery = true, value = "" +
-            "CREATE SEQUENCE IF NOT EXISTS SEQ_CONSTRUCTOR_ID \n" +
-            "START 220 \n" +
-            "NO CYCLE \n" +
-            "OWNED BY CONSTRUCTOR.constructor.id;")
-    public void getSequence();
+    private final EntityManagerFactory entityManagerFactory;
 
+    public ConstructorRepository(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
 
-    @Query(nativeQuery = true, value = "INSERT INTO CONSTRUCTORS (constructorid, constructorref, name, nationality, url) VALUES (216,:constructorRef,:name,:nationality, :url)")
-    public void create(  @Param("constructorRef") String constructorRef,
-                           @Param("name") String name,
-                           @Param("nationality") String nationality,
-                           @Param("url") String url);
+    public void createConstructor(CreateConstructorDTO constructorDTO) {
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        try{
+            entityManager.getTransaction().begin();
+
+            jakarta.persistence.Query query = entityManager.createNativeQuery(
+                    SQLScripts.CONSTRUCTOR_INSERT
+            );
+
+            query.setParameter("constructorRef", constructorDTO.getConstructorRef());
+            query.setParameter("name", constructorDTO.getName());
+            query.setParameter("nationality", constructorDTO.getNationality());
+            query.setParameter("url", constructorDTO.getUrl());
+
+            query.executeUpdate();
+
+            entityManager.getTransaction().commit();
+
+        } catch (Exception exception) {
+            entityManager.getTransaction().rollback();
+            throw exception;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    public ArrayList<ConstructorModel> findAll() {
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        try{
+            entityManager.getTransaction().begin();
+
+            Query query = entityManager.createNativeQuery(
+                    SQLScripts.FIND_ALL_CONSTRUCTORS
+            );
+
+            List<Object[]> tuplas = query.getResultList();
+
+            ArrayList<ConstructorModel> responseList = new ArrayList<>();
+
+            tuplas.forEach(tupla ->
+                    responseList.add(
+                            ConstructorModel.builder()
+                                    .constructorId(Integer.valueOf(tupla[0].toString()))
+                                    .constructorRef(tupla[1].toString())
+                                    .name(tupla[2].toString())
+                                    .nationality(tupla[3].toString())
+                                    .url(tupla[4].toString())
+                                    .build()
+                    )
+            );
+
+            return responseList;
+
+        } catch (Exception exception) {
+            entityManager.getTransaction().rollback();
+            throw exception;
+        } finally {
+            entityManager.close();
+        }
+
+    }
+
+    public Optional<ConstructorModel> findById(Integer id) {
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        try{
+            entityManager.getTransaction().begin();
+
+            Query query = entityManager.createNativeQuery(
+                    SQLScripts.FIND_CONSTRUCTOR_BY_ID
+            );
+
+            query.setParameter("constructorId", id);
+
+            Object[] singleResult = (Object[]) query.getSingleResult();
+
+            return Optional.ofNullable(ConstructorModel.builder()
+                    .constructorId(Integer.valueOf(singleResult[0].toString()))
+                    .constructorRef(singleResult[1].toString())
+                    .name(singleResult[2].toString())
+                    .nationality(singleResult[3].toString())
+                    .url(singleResult[4].toString())
+                    .build());
+
+        } catch (Exception exception) {
+            entityManager.getTransaction().rollback();
+            throw exception;
+        } finally {
+            entityManager.close();
+        }
+
+    }
 
 }

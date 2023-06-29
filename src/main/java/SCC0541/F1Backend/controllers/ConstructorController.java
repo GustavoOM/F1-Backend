@@ -28,5 +28,7 @@ public class ConstructorController {
     }
 
     @PostMapping("/create")
-    public void createContructor(@RequestBody @Valid CreateConstructorDTO createConstructorDTO) { constructorService.createContructor(createConstructorDTO); }
+    public void createContructor(@RequestBody @Valid CreateConstructorDTO createConstructorDTO) {
+        constructorService.createContructor(createConstructorDTO);
+    }
 }

@@ -29,6 +29,9 @@ public class DriverModel {
     @Column(name = "Code")
     private String code;
 
+    @Column(name = "Forename")
+    private String forename;
+
     @Column(name = "Surname")
     private String surname;
 

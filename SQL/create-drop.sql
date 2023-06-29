@@ -129,6 +129,11 @@ CREATE TABLE Constructors  (
     Url TEXT
     );
 
+   -- Criando a sequence dos ids dos usuarios
+CREATE SEQUENCE IF NOT EXISTS SEQ_CONSTRUCTOR_ID 
+START 215 
+NO CYCLE 
+OWNED BY CONSTRUCTORS.constructorid;
    
    
 DROP TABLE IF EXISTS DriverStandings CASCADE;

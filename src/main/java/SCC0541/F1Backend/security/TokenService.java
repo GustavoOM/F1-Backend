@@ -1,7 +1,10 @@
 package SCC0541.F1Backend.security;
 
 import SCC0541.F1Backend.dtos.TokenDTO;
+import SCC0541.F1Backend.models.DriverModel;
 import SCC0541.F1Backend.models.UsuarioModel;
+import SCC0541.F1Backend.repositories.ConstructorRepository;
+import SCC0541.F1Backend.repositories.DriverRepository;
 import SCC0541.F1Backend.services.UsuarioService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -29,6 +32,10 @@ public class TokenService {
 
     private final UsuarioService usuarioService;
 
+    private final DriverRepository driverRepository;
+    private final ConstructorRepository constructorRepository;
+
+
     public TokenDTO getToken(UsuarioModel usuarioModel) {
 
         Date now = new Date();
@@ -42,10 +49,13 @@ public class TokenService {
 
         Integer idOriginal = usuarioModel.getIdOriginal() != null ? usuarioModel.getIdOriginal() : null;
 
+        String usuarioLogado = recuperarNomeUsuarioLogado(usuarioModel.getIdOriginal(), listaDeCargos);
+
         String token = Jwts.builder()
                 .setIssuer("F1-Backend")
                 .claim("id", id)
                 .claim("idOriginal", idOriginal)
+                .claim("usuarioLogado", usuarioLogado)
                 .claim("roles", listaDeCargos)
                 .setIssuedAt(now)
                 .setExpiration(exp)
@@ -53,6 +63,19 @@ public class TokenService {
                 .compact();
 
         return new TokenDTO(token, listaDeCargos);
+    }
+
+    private String recuperarNomeUsuarioLogado(Integer idOriginal, List<String> listaDeCargos) {
+
+        if(listaDeCargos.contains("Administrador")) {
+            return "Administrador";
+        } else if (listaDeCargos.contains("Escuderia")) {
+            return constructorRepository.findById(idOriginal)
+                    .orElseThrow().getName();
+        }
+        DriverModel driverModel = driverRepository.findById(idOriginal)
+                .orElseThrow();
+        return  driverModel.getForename() + " " + driverModel.getSurname();
     }
 
     public UsernamePasswordAuthenticationToken isValid(String token) {

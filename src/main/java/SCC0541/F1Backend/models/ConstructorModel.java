@@ -3,15 +3,13 @@ package SCC0541.F1Backend.models;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity(name="Constructors")
 public class ConstructorModel {
     // identificadores

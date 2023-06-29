@@ -2,7 +2,6 @@ package SCC0541.F1Backend.config;
 
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
