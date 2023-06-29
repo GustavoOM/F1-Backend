@@ -1,5 +1,6 @@
 package SCC0541.F1Backend.config;
 
+import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -12,10 +13,9 @@ public class PostgresMD5PasswordEncoder implements PasswordEncoder {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] digest = md.digest(rawPassword.toString().getBytes());
-            BigInteger bigInt = new BigInteger(1, digest);
-            return bigInt.toString(16);
+            return new String(Hex.encode(digest));
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error encoding password.", e);
+            throw new RuntimeException("Falha ao realizar encode de senha");
         }
     }
 

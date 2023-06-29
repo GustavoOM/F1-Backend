@@ -1,9 +1,11 @@
 package SCC0541.F1Backend.security;
 
+import SCC0541.F1Backend.services.LogService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,11 +18,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Slf4j
+@AllArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
+
+    private final LogService logService;
+
     public static final String BEARER = "Bearer ";
 
     @Override
@@ -29,6 +34,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String token = getTokenFromHeader(request);
+
+
+        logService.createLog(token);
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 tokenService.isValid(token);

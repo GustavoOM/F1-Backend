@@ -38,10 +38,14 @@ public class TokenService {
         // poderá ser :'Administrador', 'Escuderia' OU 'Piloto'
         List<String> listaDeCargos = List.of(usuarioModel.getTipo());
 
+        int id = usuarioModel.getUserId();
+
+        Integer idOriginal = usuarioModel.getIdOriginal() != null ? usuarioModel.getIdOriginal() : null;
+
         String token = Jwts.builder()
                 .setIssuer("F1-Backend")
-                .claim("id", usuarioModel.getUserId())
-                .claim("originalId", usuarioModel.getIdOriginal())
+                .claim("id", id)
+                .claim("idOriginal", idOriginal)
                 .claim("roles", listaDeCargos)
                 .setIssuedAt(now)
                 .setExpiration(exp)
@@ -57,9 +61,6 @@ public class TokenService {
             return null;
         }
 
-        if (!token.startsWith("Bearer ")) {
-            token = "Bearer " + token;
-        }
 
         Claims body = recoverBodyFromToken(token);
 

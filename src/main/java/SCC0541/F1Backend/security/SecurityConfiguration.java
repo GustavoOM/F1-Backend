@@ -1,6 +1,7 @@
 package SCC0541.F1Backend.security;
 
 import SCC0541.F1Backend.config.PostgresMD5PasswordEncoder;
+import SCC0541.F1Backend.services.LogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,13 +23,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SecurityConfiguration{
 
     private final TokenService tokenService;
+    private final LogService logService;
 
     private final String[] caminhosIgnorados = new String[]{"/v3/api-docs",
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/swagger-ui/**",
             "/",
-            "/usuario/login"};
+            "/usuario/login",
+            "/usuario-controller/login"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,7 +45,7 @@ public class SecurityConfiguration{
                 );
 
         http.addFilterBefore(
-                new TokenAuthenticationFilter(tokenService),
+                new TokenAuthenticationFilter(tokenService, logService),
                 UsernamePasswordAuthenticationFilter.class
         );
 
@@ -59,6 +62,16 @@ public class SecurityConfiguration{
                         .exposedHeaders("Authorization");
             }
         };
+    }
+
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(
+                "/",
+                "/usuario/login",
+                "/swagger-ui/index.html#/usuario-controller/login"
+        );
     }
 
     @Bean

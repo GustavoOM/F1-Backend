@@ -70,12 +70,20 @@ DO $$ DECLARE DirLocal TEXT; BEGIN
 
 DROP TABLE IF EXISTS LOG_TABLE;
 
--- Criando a tabela usuários
+-- Criando a tabela de logs
 CREATE TABLE LOG_TABLE (
-	userId INTEGER NOT NULL PRIMARY KEY,
+	logId INTEGER NOT NULL PRIMARY KEY,
+	userId INTEGER NOT NULL,
 	idOriginal INTEGER,
 	timestamp TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
+-- Criando a sequence dos ids dos logs
+CREATE SEQUENCE IF NOT EXISTS SEQ_USER_LOGS_ID 
+START 1 
+NO CYCLE 
+OWNED BY LOG_TABLE.userId;
+
 
 
 DROP TABLE IF EXISTS USERS;
