@@ -1,5 +1,8 @@
 package SCC0541.F1Backend.services;
 
+import SCC0541.F1Backend.dtos.ConstructorDTO;
+import SCC0541.F1Backend.dtos.CreateConstructorDTO;
+import SCC0541.F1Backend.dtos.CreateDriverDTO;
 import SCC0541.F1Backend.dtos.DriverDTO;
 import SCC0541.F1Backend.repositories.DriverRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +25,18 @@ public class DriverService {
                 .toList();
     }
 
-    //public DriverDTO createDriver(String driverRef, Integer number, String code, String forename, String surname, LocalDateTime birthDay, String nationality){
-    //    return
-    //}
+    public DriverDTO findById(Integer id){
+        return objectMapper
+                .convertValue(
+                        driverRepository.findById(id).orElseThrow(), DriverDTO.class);
+    }
+
+    public void createDriver(CreateDriverDTO createDriverDTO) {
+        driverRepository
+                .createDriver(
+                        createDriverDTO
+                );
+    }
+
+
 }

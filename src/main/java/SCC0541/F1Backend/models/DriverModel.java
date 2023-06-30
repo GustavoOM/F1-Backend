@@ -3,17 +3,16 @@ package SCC0541.F1Backend.models;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity(name="Driver")
 public class DriverModel {
     @Id
@@ -36,7 +35,7 @@ public class DriverModel {
     private String surname;
 
     @Column(name = "Dob")
-    private LocalDateTime dob;
+    private LocalDate dob;
 
     @Column(name = "Nationality")
     private String nationality;
@@ -44,8 +43,12 @@ public class DriverModel {
     @Column(name = "url")
     private String url;
 
+    public void setDob(String dob) {
 
+    }
 }
+
+
 
 /*
 

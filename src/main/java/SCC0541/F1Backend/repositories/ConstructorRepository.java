@@ -98,7 +98,7 @@ public class ConstructorRepository {
                     SQLScripts.FIND_CONSTRUCTOR_BY_ID
             );
 
-            query.setParameter("constructorId", id);
+            query.setParameter("id", id);
 
             Object[] singleResult = (Object[]) query.getSingleResult();
 
